@@ -1,3 +1,61 @@
 {
-  "extends": ["config:base"]
+  "extends": [
+    "config:base",
+    "group:linters",
+    "helpers:pinGitHubActionDigests",
+    "preview:dockerVersions",
+    "docker:pinDigests",
+    "preview:dockerCompose",
+    ":separateMultipleMajorReleases",
+    ":ignoreUnstable",
+    ":semanticCommits",
+    ":semanticPrefixFixDepsChoreOthers",
+    "regexManagers:dockerfileVersions",
+    "regexManagers:githubActionsVersions"
+  ],
+  "assignees": ["ViktorijaEl"],
+  
+  "dependencyDashboardTitle": "Renovate Dependency Dashboard",
+  "dependencyDashboardLabels": ["🪄hello-from-renovate"],
+  "dependencyDashboardHeader": "This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>; Renovate logs for debug [here](https://developer.mend.io/{{platform}}/{{repository}}).",
+  "minimumReleaseAge": "3 days",
+  "rollbackPrs": true,
+  "addLabels": ["auto-update"],
+  "configMigration": true,
+  "prCreation": "not-pending",
+  "vulnerabilityAlerts": {
+    "description": "Be sure that the Dependency graph and Dependabot alerts are enabled for the repo. Details: https://docs.renovatebot.com/configuration-options/#vulnerabilityalerts",
+    "enabled": true,
+    "addLabels": ["security"]
+  },
+  "terraform": {
+    "ignorePaths": ["**/context.tf"],
+    "pinDigests": true
+  },
+  "kubernetes": {
+    "fileMatch": ["\\.yaml$"]
+  },
+  "packageRules": [
+    {
+      "description": "v prefix workaround for action updates",
+      "matchDepTypes": ["action"],
+      "extractVersion": "^(?<version>v\\d+\\.\\d+\\.\\d+)$",
+      "versioning": "regex:^v(?<major>\\d+)(\\.(?<minor>\\d+)\\.(?<patch>\\d+))?$"
+    },
+    {
+      "description": "Remove v prefix in regex `_VERSION` updates",
+      "matchManagers": ["regex"],
+      "extractVersion": "^?v?(?<version>\\d+\\.\\d+\\.\\d+.*)$",
+      "versioning": "regex:^v?(?<major>\\d+)(\\.(?<minor>\\d+)\\.(?<patch>\\d+.*))?$"
+    },
+    {
+      "matchDatasources": ["docker"],
+      "schedule": ["after 4am on monday and tuesday"]
+    },
+    {
+      "matchManagers": ["regex"],
+      "schedule": ["after 4am on monday and tuesday"]
+    }
+  ],
+  "schedule": ["after 4am on tuesday"]
 }
