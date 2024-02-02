@@ -13,7 +13,7 @@
     "regexManagers:dockerfileVersions",
     "regexManagers:githubActionsVersions"
   ],
-  "assignees": ["ViktorijaEl"],
+  "assignees": ["vs"],
   
   "dependencyDashboardTitle": "Renovate Dependency Dashboard",
   "dependencyDashboardLabels": ["🪄hello-from-renovate"],
